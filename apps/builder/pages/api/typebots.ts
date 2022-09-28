@@ -5,6 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { getAuthenticatedUser } from 'services/api/utils'
 import { parseNewTypebot } from 'services/typebots/typebots'
 import { badRequest, methodNotAllowed, notAuthenticated, notFound } from 'utils'
+import withAxiom from 'prisma-axiom'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const user = await getAuthenticatedUser(req)
@@ -15,8 +16,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const folderId = req.query.allFolders
         ? undefined
         : req.query.folderId
-        ? req.query.folderId.toString()
-        : null
+          ? req.query.folderId.toString()
+          : null
       if (!workspaceId) return badRequest(res)
       const typebotIds = req.query.typebotIds as string[] | undefined
       if (typebotIds) {
@@ -86,10 +87,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           'groups' in data
             ? data
             : (parseNewTypebot({
-                ownerAvatarUrl: user.image,
-                isBrandingEnabled: workspace.plan === Plan.FREE,
-                ...data,
-              }) as Prisma.TypebotUncheckedCreateInput),
+              ownerAvatarUrl: user.image,
+              isBrandingEnabled: workspace.plan === Plan.FREE,
+              ...data,
+            }) as Prisma.TypebotUncheckedCreateInput),
       })
       return res.send(typebot)
     }
@@ -103,4 +104,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 }
 
-export default withSentry(handler)
+export default withAxiom(withSentry(handler))

@@ -31,5 +31,8 @@
       "path": "node_modules/cz-emoji"
     }
   },
-  "packageManager": "pnpm@7.8.0"
+  "packageManager": "pnpm@7.8.0",
+  "dependencies": {
+    "prisma-axiom": "github:axiomhq/prisma-axiom#17ac73ac4f869b15afe23cc119d9eeb2a24328f3"
+  }
 }
